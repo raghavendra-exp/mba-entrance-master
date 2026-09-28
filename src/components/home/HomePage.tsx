@@ -48,9 +48,11 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-12 animate-in fade-in duration-300">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 text-white p-6 sm:p-12 border border-slate-800 shadow-2xl">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 text-white p-6 sm:p-12 border border-slate-800 shadow-2xl max-w-full">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-3xl">
+          <div className="absolute top-0 right-0 w-64 sm:w-[500px] h-64 sm:h-[500px] bg-blue-600/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-48 sm:w-80 h-48 sm:h-80 bg-indigo-600/10 rounded-full blur-3xl" />
+        </div>
 
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-bold tracking-wide">

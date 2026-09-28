@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Exam Switcher Tabs */}
-        <div className="hidden md:flex items-center p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700">
+        <div className="hidden lg:flex items-center p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700">
           {(['CAT', 'XAT', 'SNAP', 'NMAT'] as ExamId[]).map((exam) => {
             const isActive = selectedExam === exam;
             return (
@@ -130,8 +130,8 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Actions (Version, Search, Language, Theme) */}
         <div className="flex items-center gap-1 sm:gap-2">
-          {/* Version Dropdown - shown on sm+ screens */}
-          <div className="relative hidden sm:flex items-center">
+          {/* Version Dropdown - shown on lg+ screens */}
+          <div className="relative hidden lg:flex items-center">
             <label htmlFor="version-select" className="sr-only">Select Exam Version</label>
             <History className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none" />
             <select
