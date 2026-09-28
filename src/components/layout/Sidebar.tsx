@@ -119,17 +119,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {isMobileSidebarOpen && (
         <div
           onClick={() => setIsMobileSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
+          aria-hidden="true"
         />
       )}
 
       {/* Sidebar Content */}
       <aside
-        className={`fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-300 ease-in-out shrink-0 overflow-y-auto ${
+        className={`fixed lg:sticky top-0 lg:top-16 left-0 z-50 lg:z-30 h-full lg:h-[calc(100vh-4rem)] w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-transform duration-300 ease-in-out shrink-0 overflow-y-auto ${
           isMobileSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="p-3 space-y-6">
+        <div className="p-3 space-y-5">
+          {/* Mobile Header with Close Button */}
+          <div className="flex items-center justify-between lg:hidden pb-2 border-b border-slate-100 dark:border-slate-800">
+            <span className="font-extrabold text-sm text-slate-900 dark:text-white">Navigation Menu</span>
+            <button
+              onClick={() => setIsMobileSidebarOpen(false)}
+              className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              aria-label="Close Navigation Menu"
+            >
+              <CheckCircle2 className="w-4 h-4 hidden" />
+              <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">✕ Close</span>
+            </button>
+          </div>
+
           {/* Fast Exam Switcher Banner */}
           <div className="p-2.5 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80 border border-blue-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-1.5">
@@ -147,6 +161,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={() => {
                     setSelectedExam(exam);
                     setCurrentPage('exam-detail');
+                    setIsMobileSidebarOpen(false);
                   }}
                   className={`py-1 text-xs font-bold rounded-lg border transition-all ${
                     selectedExam === exam

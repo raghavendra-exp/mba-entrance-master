@@ -72,8 +72,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return (localStorage.getItem('mba_lang') as 'EN' | 'HI') || 'EN';
   });
 
-  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(() => {
-    return (localStorage.getItem('mba_theme') as 'light' | 'dark' | 'system') || 'system';
+  const [theme, setThemeState] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('mba_theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
   });
 
   const [currentPage, setCurrentPageState] = useState<NavPage>('home');
@@ -117,15 +122,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
-  // Apply dark mode
+  // Apply dark mode to <html>, <body>, and CSS color-scheme
   useEffect(() => {
     const root = document.documentElement;
-    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    if (isDark) {
+    const body = document.body;
+    if (theme === 'dark') {
       root.classList.add('dark');
+      body.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      body.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
+    localStorage.setItem('mba_theme', theme);
   }, [theme]);
 
   const setLanguage = (lang: 'EN' | 'HI') => {
@@ -134,8 +144,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const setTheme = (t: 'light' | 'dark' | 'system') => {
-    setThemeState(t);
-    localStorage.setItem('mba_theme', t);
+    if (t === 'system') {
+      const isSysDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setThemeState(isSysDark ? 'dark' : 'light');
+    } else {
+      setThemeState(t);
+    }
   };
 
   const setCurrentPage = (page: NavPage, params: Record<string, string> = {}) => {

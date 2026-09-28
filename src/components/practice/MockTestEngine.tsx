@@ -38,6 +38,7 @@ export const MockTestEngine: React.FC = () => {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [markedForReview, setMarkedForReview] = useState<Record<string, boolean>>({});
   const [mockResult, setMockResult] = useState<MockSessionResult | null>(null);
+  const [showMobilePalette, setShowMobilePalette] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -342,10 +343,18 @@ export const MockTestEngine: React.FC = () => {
             {/* Left 3 Cols: Question & Options */}
             <div className="lg:col-span-3 space-y-4">
               <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 text-xs text-slate-500">
-                  <span className="font-bold text-sm text-slate-900 dark:text-white">
-                    Question {currentQuestionIndex + 1} of {activeSection.questions.length}
-                  </span>
+                <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 text-xs text-slate-500 gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-sm text-slate-900 dark:text-white">
+                      Question {currentQuestionIndex + 1} of {activeSection.questions.length}
+                    </span>
+                    <button
+                      onClick={() => setShowMobilePalette(!showMobilePalette)}
+                      className="lg:hidden px-2.5 py-1 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold text-[11px] hover:bg-blue-200 transition-colors"
+                    >
+                      {showMobilePalette ? '✕ Hide Palette' : '🔢 Palette'}
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold">
                       {activeQuestion.topic}
@@ -455,11 +464,19 @@ export const MockTestEngine: React.FC = () => {
             </div>
 
             {/* Right 1 Col: Question Palette */}
-            <div className="space-y-4">
+            <div className={`space-y-4 ${showMobilePalette ? 'block' : 'hidden lg:block'}`}>
               <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
-                <h3 className="font-extrabold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Question Palette
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Question Palette
+                  </h3>
+                  <button
+                    onClick={() => setShowMobilePalette(false)}
+                    className="lg:hidden text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  >
+                    ✕ Close
+                  </button>
+                </div>
 
                 {/* Legend */}
                 <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-600 dark:text-slate-400 pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -482,7 +499,7 @@ export const MockTestEngine: React.FC = () => {
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-2 max-h-72 overflow-y-auto pr-1">
                   {activeSection.questions.map((q, idx) => {
                     const isAnswered = !!userAnswers[q.id];
                     const isMarked = !!markedForReview[q.id];
@@ -500,8 +517,12 @@ export const MockTestEngine: React.FC = () => {
                     return (
                       <button
                         key={q.id}
-                        onClick={() => setCurrentQuestionIndex(idx)}
+                        onClick={() => {
+                          setCurrentQuestionIndex(idx);
+                          setShowMobilePalette(false);
+                        }}
                         className={`h-8 rounded-lg text-xs font-mono transition-transform hover:scale-105 ${bgClass}`}
+                        aria-label={`Jump to question ${idx + 1}`}
                       >
                         {idx + 1}
                       </button>

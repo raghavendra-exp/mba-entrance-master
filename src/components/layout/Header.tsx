@@ -66,9 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const toggleTheme = () => {
-    if (theme === 'light') setTheme('dark');
-    else if (theme === 'dark') setTheme('system');
-    else setTheme('light');
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   return (
@@ -131,17 +129,17 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Right: Actions (Version, Search, Language, Theme) */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Version Dropdown */}
-          <div className="relative flex items-center">
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* Version Dropdown - shown on sm+ screens */}
+          <div className="relative hidden sm:flex items-center">
             <label htmlFor="version-select" className="sr-only">Select Exam Version</label>
-            <History className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none hidden sm:block" />
+            <History className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none" />
             <select
               id="version-select"
               value={selectedVersion}
               onChange={handleVersionChange}
               aria-label="Exam Edition and Historical Version Selector"
-              className="text-xs font-medium pl-2 sm:pl-7 pr-4 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="text-xs font-medium pl-7 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
               <optgroup label="CAT Versions">
                 <option value="CAT-2026">CAT 2026 (Upcoming)</option>
@@ -167,11 +165,12 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Search Trigger */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-500 text-xs transition-colors"
+            className="flex items-center gap-1.5 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-500 text-xs transition-colors"
             title="Global Search (Ctrl+K)"
+            aria-label="Open Global Search"
           >
             <Search className="w-4 h-4 text-slate-400" />
-            <span className="hidden sm:inline">Search</span>
+            <span className="hidden md:inline">Search</span>
             <kbd className="hidden lg:inline-block text-[10px] font-semibold px-1 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-slate-500 dark:text-slate-400">
               ⌘K
             </kbd>
@@ -180,27 +179,25 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Language Switcher */}
           <button
             onClick={() => setLanguage(language === 'EN' ? 'HI' : 'EN')}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold transition-colors"
+            className="flex items-center gap-1 px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-bold transition-colors"
             title={language === 'EN' ? "Switch to Hindi (हिंदी)" : "Switch to English"}
             aria-label={language === 'EN' ? "Switch interface to Hindi language" : "Switch interface to English language"}
           >
-            <Languages className="w-3.5 h-3.5 text-blue-500" />
-            <span>{language === 'EN' ? 'हिन्दी' : 'EN'}</span>
+            <Languages className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            <span className="text-[11px] sm:text-xs">{language === 'EN' ? 'हिन्दी' : 'EN'}</span>
           </button>
 
           {/* Theme Switcher */}
           <button
             onClick={toggleTheme}
-            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-            title={`Current theme: ${theme}. Click to switch.`}
-            aria-label={`Toggle theme: current is ${theme}`}
+            className="p-1.5 sm:p-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shrink-0"
+            title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {theme === 'dark' ? (
-              <Moon className="w-4 h-4 text-indigo-400" />
-            ) : theme === 'light' ? (
-              <Sun className="w-4 h-4 text-amber-500" />
+              <Sun className="w-4 h-4 text-amber-400 transition-transform duration-200 hover:rotate-45" />
             ) : (
-              <Sparkles className="w-4 h-4 text-blue-400" />
+              <Moon className="w-4 h-4 text-slate-700 dark:text-slate-300 transition-transform duration-200 hover:-rotate-12" />
             )}
           </button>
         </div>
